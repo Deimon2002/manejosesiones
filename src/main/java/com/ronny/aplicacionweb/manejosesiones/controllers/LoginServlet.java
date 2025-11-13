@@ -1,5 +1,10 @@
 package com.ronny.aplicacionweb.manejosesiones.controllers;
-
+/*
+DESARROLLADOR: Ronny Bastidas
+DESCRIPCION: Servlet para lograr iniciar sesion.
+ademas autentica si hay una sesion en caso contrario sera redirigido a login.jsp
+si valida usuario y contraseña crea una sesion y redirige a la paguina principal
+*/
 import com.ronny.aplicacionweb.manejosesiones.services.LoginService;
 import com.ronny.aplicacionweb.manejosesiones.services.LoginServiceSessionImpl;
 import jakarta.servlet.ServletException;

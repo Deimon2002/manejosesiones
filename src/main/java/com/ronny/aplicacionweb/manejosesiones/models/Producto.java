@@ -1,13 +1,16 @@
 package com.ronny.aplicacionweb.manejosesiones.models;
-
+/*
+DESARROLLADOR: Ronny Bastidas
+DESCRIPCION:es una clase modelo que representa los datos basicos como el id, nombre, tipo, precio
+se usa como modelo de datos para mover informacion entre capas
+*/
 public class Producto {
     // Atributos simples del producto
     private Long id;
     private String nombre;
     private String tipo;
-    private int precio; // Puede ser int para demo; en dinero real se prefiere BigDecimal
+    private int precio;
 
-    // Constructor vacío (necesario para frameworks/serialización)
     public Producto() {
     }
 

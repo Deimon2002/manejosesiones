@@ -1,5 +1,10 @@
 package com.ronny.aplicacionweb.manejosesiones.controllers;
 
+/*
+DESARROLLADOR: Ronny Bastidas
+DESCRIPCION: Servlet para cerrar sesión.
+Si hay usuario logueado, invalida la HttpSession y luego redirige al login.
+*/
 
 import com.ronny.aplicacionweb.manejosesiones.services.LoginService;
 import com.ronny.aplicacionweb.manejosesiones.services.LoginServiceSessionImpl;
@@ -20,18 +25,18 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        // 1. Llama a nuestro "trabajador" de servicio
+        // Llama a nuestro "trabajador" de servicio
         LoginService auth = new LoginServiceSessionImpl();
         Optional<String> username = auth.getUsername(req);
 
-        // 2. ¿Realmente hay una sesión que cerrar?
+        // ¿Realmente hay una sesión que cerrar?
         if (username.isPresent()) {
-            // 3. Si SÍ, obtenemos la sesión...
+            // Si SÍ, obtenemos la sesión...
             HttpSession session = req.getSession();
-            // 4.La invalidamos (Esto borra el "username" y todo lo demás)
+            // La invalidamos (Esto borra el "username" y todo lo demás)
             session.invalidate();
         }
-        // 5. Mandamos al usuario de vuelta al login
+        // Mandamos al usuario de vuelta al login
         resp.sendRedirect(req.getContextPath() + "/login.html");
     }
 }
