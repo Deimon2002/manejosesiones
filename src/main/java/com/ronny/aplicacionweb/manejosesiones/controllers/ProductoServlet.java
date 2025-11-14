@@ -5,6 +5,7 @@ DESCRIPCION: Servlet que muestra la tabla de nuestros productos
 Si hay un usuario logueado es saludado y mostrarar la columna de precios
 en el caso contrario solo vera la info basica de id nombre y tipo de producto
 */
+
 import com.ronny.aplicacionweb.manejosesiones.models.Producto;
 import com.ronny.aplicacionweb.manejosesiones.services.LoginService;
 import com.ronny.aplicacionweb.manejosesiones.services.LoginServiceSessionImpl;
@@ -15,74 +16,81 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.System.out;
+
 
 @WebServlet({"/productos", "/productos.html"})// rutas que atiende este servlet: /productos y /productos.html
 public class ProductoServlet extends HttpServlet {
-
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
-        //  Servicio que entrega la lista de productos
-        ProductoService productoService = new ProductoServiceImpl();
-        LoginService auth = new LoginServiceSessionImpl(); // servicio para revisar la sesión
+        ProductoService service = new ProductoServiceImpl();
+        List<Producto> productos = service.listar();
 
-        //  Obtenemos la lista de productos
-        List<Producto> productos = productoService.listar();
+        // Obtener información de sesión
+        HttpSession session = req.getSession();
+        Optional<String> usernameOptional = Optional.ofNullable(
+                (String) session.getAttribute("username"));
 
-        //  Revisamos si el usuario tiene sesión iniciada
-        Optional<String> usernameOptional = auth.getUsername(req);
-
-        //  Empezamos a construir la página HTML
         resp.setContentType("text/html;charset=UTF-8");
+
         try (PrintWriter out = resp.getWriter()) {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
-            out.println("  <head>");
-            out.println("    <meta charset=\"UTF-8\">");
-            out.println("    <title>Listado de Productos</title>");
-            out.println("  </head>");
-            out.println("  <body>");
-            out.println("    <h1>Listado de Productos!</h1>");
+            out.println("<head>");
+            out.println("<meta charset=\"UTF-8\">");
+            out.println("<title>Listado de Productos</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Listado de Productos!</h1>");
 
-            //  Saludo condicional si esta autenticado
+            // Inicio de la tabla
+            out.println("<table border='1'>");
+            out.println("<tr>");
+            out.println("<th>id</th>");
+            out.println("<th>nombre</th>");
+            out.println("<th>tipo</th>");
+
             if (usernameOptional.isPresent()) {
-                out.println("<div style='color: blue;'>Hola " + usernameOptional.get() + ", Bienvenido!</div>");
+                out.println("<th>precio</th>");
+                out.println("<th>agregar</th>");
             }
 
-            //  Empezamos la tabla HTML
-            out.println("<table>");
-            out.println("  <tr>");
-            out.println("    <th>id</th>");
-            out.println("    <th>nombre</th>");
-            out.println("    <th>tipo</th>");
+            out.println("</tr>");
 
-            //  la columna precio solo aparece si hay una sesión iniciada
-            if (usernameOptional.isPresent()) {
-                out.println("    <th>precio</th>");
-            }
-            out.println("  </tr>");
-
-            //  Llenamos la tabla con los productos
+            // UN SOLO BUCLE para llenar la tabla
             for (Producto p : productos) {
-                out.println("  <tr>");
-                out.println("    <td>" + p.getId() + "</td>");
-                out.println("    <td>" + p.getNombre() + "</td>");
-                out.println("    <td>" + p.getTipo() + "</td>");
+                out.println("<tr>");
+                out.println("<td>" + p.getId() + "</td>");
+                out.println("<td>" + p.getNombre() + "</td>");
+                out.println("<td>" + p.getTipo() + "</td>");
 
-                //  Mostramos el precio solo si hay una sesión iniciada
                 if (usernameOptional.isPresent()) {
-                    out.println("    <td>" + p.getPrecio() + "</td>");
+                    out.println("<td>" + p.getPrecio() + "</td>");
+                    out.println("<td><a href=\""
+                            + req.getContextPath()
+                            + "/agregar-carro?id="
+                            + p.getId()
+                            + "\">Agregar Producto al carro</a></td>");
                 }
-                out.println("  </tr>");
+
+                out.println("</tr>");
             }
+
             out.println("</table>");
-            out.println("  </body>");
+            out.println("</body>");
             out.println("</html>");
+
+            // ASEGÚRATE DE QUE NO HAY NADA MÁS AQUÍ
+            // NO debe haber otro bucle ni otro println con productos
         }
     }
 }
