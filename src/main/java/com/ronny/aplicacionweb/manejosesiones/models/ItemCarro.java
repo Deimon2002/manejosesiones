@@ -100,4 +100,10 @@ public class ItemCarro {
     public double getSubtotal() {
         return cantidad * producto.getPrecio();  // NOTA: Debería ser multiplicación (*)
     }
+    public double getIva() {
+        return getSubtotal() * 0.12;
+    }
+    public double getTotalConIva() {
+        return getSubtotal() * 1.12;
+}
 }

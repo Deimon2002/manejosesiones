@@ -69,4 +69,15 @@ public class DetalleCarro {
                 .mapToDouble(ItemCarro::getSubtotal)  // Convierte cada item a su subtotal
                 .sum();  // Suma todos los subtotales
     }
+    //Calcula el IVA total del carrito (12% sobre el subtotal).
+    public double getIva() {
+        return getTotal() * 0.12;
+    }
+    //Calcula el total del carrito incluyendo el IVA del 12%.
+    public double getTotalConIva() {
+        return getTotal() * 1.12;
+    }
+
+
+
 }

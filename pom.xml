@@ -17,7 +17,7 @@
         <junit.version>5.13.2</junit.version>
     </properties>
 
-<dependencies>
+    <dependencies>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -38,6 +38,8 @@
             <version>11.0.0-M1</version>
             <scope>provided</scope>
         </dependency>
+
+
     </dependencies>
 
     <build>
