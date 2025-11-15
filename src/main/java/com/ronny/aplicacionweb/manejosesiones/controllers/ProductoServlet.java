@@ -45,24 +45,35 @@ public class ProductoServlet extends HttpServlet {
             out.println("<head>");
             out.println("<meta charset=\"UTF-8\">");
             out.println("<title>Listado de Productos</title>");
+
+            // CDN Bootstrap
+            out.println("<link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css\" rel=\"stylesheet\">");
+
             out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Listado de Productos!</h1>");
+            out.println("<body class='bg-light'>");
 
-            // Inicio de la tabla
-            out.println("<table border='1'>");
+            out.println("<div class='container mt-5'>");
+            out.println("<h1 class='text-center mb-4'>Listado de Productos</h1>");
+
+            // Inicio de tabla con Bootstrap
+            out.println("<table class='table table-striped table-bordered'>");
+            out.println("<thead class='table-dark'>");
             out.println("<tr>");
-            out.println("<th>id</th>");
-            out.println("<th>nombre</th>");
-            out.println("<th>tipo</th>");
-            if (usernameOptional.isPresent()) {
-                out.println("<th>precio</th>");
-                out.println("<th>precio con IVA</th>");  // Nueva columna
-                out.println("<th>agregar</th>");
-            }
-            out.println("</tr>");
+            out.println("<th>ID</th>");
+            out.println("<th>Nombre</th>");
+            out.println("<th>Tipo</th>");
 
-            // BUCLE para llenar la tabla
+            if (usernameOptional.isPresent()) {
+                out.println("<th>Precio</th>");
+                out.println("<th>Precio con IVA</th>");
+                out.println("<th>Acción</th>");
+            }
+
+            out.println("</tr>");
+            out.println("</thead>");
+            out.println("<tbody>");
+
+            // Llenar tabla
             for (Producto p : productos) {
                 out.println("<tr>");
                 out.println("<td>" + p.getId() + "</td>");
@@ -71,17 +82,19 @@ public class ProductoServlet extends HttpServlet {
 
                 if (usernameOptional.isPresent()) {
                     out.println("<td>$" + p.getPrecio() + "</td>");
-                    out.println("<td>$" + String.format("%.2f", p.getPrecio() * 1.12) + "</td>"); // Precio con IVA formateado
-                    out.println("<td><a href=\""
+                    out.println("<td>$" + String.format("%.2f", p.getPrecio() * 1.12) + "</td>");
+                    out.println("<td><a class='btn btn-primary btn-sm' href=\""
                             + req.getContextPath()
-                            + "/agregar-carro?id="
-                            + p.getId()
-                            + "\">Agregar al carro</a></td>");
+                            + "/agregar-carro?id=" + p.getId()
+                            + "\">Agregar</a></td>");
                 }
                 out.println("</tr>");
             }
 
+            out.println("</tbody>");
             out.println("</table>");
+            out.println("</div>"); // container
+
             out.println("</body>");
             out.println("</html>");
         }

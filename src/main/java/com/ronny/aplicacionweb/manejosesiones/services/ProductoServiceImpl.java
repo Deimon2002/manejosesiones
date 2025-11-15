@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class ProductoServiceImpl implements ProductoService {
 
-    /**
+    /*
      * Retorna la lista completa de productos disponibles.
      * En producción, esto debería consultar una base de datos.
      */
@@ -24,7 +24,7 @@ public class ProductoServiceImpl implements ProductoService {
         );
     }
 
-    /**
+    /*
      * Busca un producto específico por su ID.
      * @param id El identificador único del producto
      * @return Optional con el producto si existe, vacío si no
